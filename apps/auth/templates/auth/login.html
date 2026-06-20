@@ -1,0 +1,27 @@
+{% extends 'auth/base.html' %}
+{% block title %}Iniciar sesión{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-5">
+    <div class="card shadow-sm">
+      <div class="card-body p-4">
+        <h1 class="h4 mb-4 text-center">Iniciar sesión</h1>
+
+        <form method="post" novalidate>
+          {% csrf_token %}
+          <!-- Conserva el destino original al exigir login (Punto 8) -->
+          <input type="hidden" name="next" value="{{ request.GET.next }}">
+          {% include 'auth/_form_fields.html' %}
+          <button type="submit" class="btn btn-primary w-100">Ingresar</button>
+        </form>
+
+        <div class="d-flex justify-content-between mt-3 small">
+          <a href="{% url 'auth:forgot_password' %}">¿Olvidaste tu contraseña?</a>
+          <a href="{% url 'auth:register' %}">Crear cuenta</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

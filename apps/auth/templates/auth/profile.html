@@ -1,0 +1,24 @@
+{% extends 'auth/base.html' %}
+{% block title %}Mi perfil{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-7">
+    <div class="card shadow-sm">
+      <div class="card-body p-4">
+        <h1 class="h4 mb-1">Mi perfil</h1>
+        <p class="text-muted small">Usuario: <strong>{{ user.username }}</strong></p>
+
+        <form method="post" novalidate>
+          {% csrf_token %}
+          {% include 'auth/_form_fields.html' %}
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+            <a href="{% url 'auth:change_password' %}" class="btn btn-outline-secondary">Cambiar contraseña</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

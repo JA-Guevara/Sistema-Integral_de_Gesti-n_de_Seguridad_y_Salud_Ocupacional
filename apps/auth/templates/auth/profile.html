@@ -1,4 +1,4 @@
-{% extends 'auth/base.html' %}
+{% extends 'base.html' %}
 {% block title %}Mi perfil{% endblock %}
 
 {% block content %}
@@ -11,7 +11,7 @@
 
         <form method="post" novalidate>
           {% csrf_token %}
-          {% include 'auth/_form_fields.html' %}
+          {% include 'partials/form_fields.html' %}
           <div class="d-flex gap-2">
             <button type="submit" class="btn btn-primary">Guardar cambios</button>
             <a href="{% url 'auth:change_password' %}" class="btn btn-outline-secondary">Cambiar contraseña</a>

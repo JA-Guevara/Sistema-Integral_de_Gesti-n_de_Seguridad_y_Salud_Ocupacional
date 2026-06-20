@@ -1,0 +1,93 @@
+{% with namespace=request.resolver_match.namespace url_name=request.resolver_match.url_name %}
+  <aside class="sidebar d-none d-lg-flex">
+    <div class="sidebar-brand">
+      <span class="brand-mark"><i class="bi bi-shield-check"></i></span>
+      <span class="brand-text">
+        <strong>SySO</strong>
+        <small>Construcción civil</small>
+      </span>
+    </div>
+
+    <nav class="sidebar-nav" aria-label="Menú principal">
+      <a class="sidebar-link {% if namespace == 'dashboard' %}active{% endif %}" href="{% url 'dashboard:index' %}">
+        <i class="bi bi-speedometer2"></i>
+        <span>Inicio</span>
+      </a>
+
+      {% if perms.usuarios.ver_usuarios %}
+        <a class="sidebar-link {% if namespace == 'usuarios' and 'user' in url_name %}active{% endif %}" href="{% url 'usuarios:user_list' %}">
+          <i class="bi bi-people"></i>
+          <span>Usuarios</span>
+        </a>
+      {% endif %}
+
+      {% if perms.usuarios.ver_roles %}
+        <a class="sidebar-link {% if namespace == 'usuarios' and 'rol' in url_name %}active{% endif %}" href="{% url 'usuarios:rol_list' %}">
+          <i class="bi bi-person-lock"></i>
+          <span>Roles</span>
+        </a>
+      {% endif %}
+
+      <span class="sidebar-label">Módulos SySO</span>
+      <a class="sidebar-link disabled" href="#" aria-disabled="true">
+        <i class="bi bi-person-badge"></i>
+        <span>Trabajadores</span>
+      </a>
+      <a class="sidebar-link disabled" href="#" aria-disabled="true">
+        <i class="bi bi-clipboard-check"></i>
+        <span>Evaluaciones</span>
+      </a>
+      <a class="sidebar-link disabled" href="#" aria-disabled="true">
+        <i class="bi bi-mortarboard"></i>
+        <span>Capacitaciones</span>
+      </a>
+      <a class="sidebar-link disabled" href="#" aria-disabled="true">
+        <i class="bi bi-file-earmark-pdf"></i>
+        <span>Reportes</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <span class="status-dot"></span>
+      <span>ELC005 - Grupo 6</span>
+    </div>
+  </aside>
+
+  <div class="offcanvas offcanvas-start mobile-sidebar" tabindex="-1" id="mobileSidebar">
+    <div class="offcanvas-header">
+      <div class="sidebar-brand mb-0">
+        <span class="brand-mark"><i class="bi bi-shield-check"></i></span>
+        <span class="brand-text">
+          <strong>SySO</strong>
+          <small>Construcción civil</small>
+        </span>
+      </div>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+    </div>
+    <div class="offcanvas-body p-0">
+      <nav class="sidebar-nav" aria-label="Menú principal móvil">
+        <a class="sidebar-link {% if namespace == 'dashboard' %}active{% endif %}" href="{% url 'dashboard:index' %}">
+          <i class="bi bi-speedometer2"></i>
+          <span>Inicio</span>
+        </a>
+        {% if perms.usuarios.ver_usuarios %}
+          <a class="sidebar-link {% if namespace == 'usuarios' and 'user' in url_name %}active{% endif %}" href="{% url 'usuarios:user_list' %}">
+            <i class="bi bi-people"></i>
+            <span>Usuarios</span>
+          </a>
+        {% endif %}
+        {% if perms.usuarios.ver_roles %}
+          <a class="sidebar-link {% if namespace == 'usuarios' and 'rol' in url_name %}active{% endif %}" href="{% url 'usuarios:rol_list' %}">
+            <i class="bi bi-person-lock"></i>
+            <span>Roles</span>
+          </a>
+        {% endif %}
+        <span class="sidebar-label">Módulos SySO</span>
+        <a class="sidebar-link disabled" href="#" aria-disabled="true"><i class="bi bi-person-badge"></i><span>Trabajadores</span></a>
+        <a class="sidebar-link disabled" href="#" aria-disabled="true"><i class="bi bi-clipboard-check"></i><span>Evaluaciones</span></a>
+        <a class="sidebar-link disabled" href="#" aria-disabled="true"><i class="bi bi-mortarboard"></i><span>Capacitaciones</span></a>
+        <a class="sidebar-link disabled" href="#" aria-disabled="true"><i class="bi bi-file-earmark-pdf"></i><span>Reportes</span></a>
+      </nav>
+    </div>
+  </div>
+{% endwith %}

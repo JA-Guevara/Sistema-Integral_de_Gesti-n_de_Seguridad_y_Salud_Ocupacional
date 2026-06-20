@@ -1,4 +1,4 @@
-{% extends 'auth/base.html' %}
+{% extends 'base.html' %}
 {% block title %}Crear cuenta{% endblock %}
 
 {% block content %}
@@ -10,7 +10,7 @@
 
         <form method="post" novalidate>
           {% csrf_token %}
-          {% include 'auth/_form_fields.html' %}
+          {% include 'partials/form_fields.html' %}
           <button type="submit" class="btn btn-primary w-100">Registrarme</button>
         </form>
 

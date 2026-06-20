@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block title %}{{ rol|yesno:"Editar rol,Nuevo rol" }}{% endblock %}
+
+{% block content %}
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">{{ rol|yesno:"Editar rol,Nuevo rol" }}</h1>
+    <a href="{% url 'usuarios:rol_list' %}" class="btn btn-outline-secondary">Volver</a>
+  </div>
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+
+    <div class="card shadow-sm mb-3">
+      <div class="card-body">
+        <h2 class="h5 mb-3">Datos del rol</h2>
+        <div class="row g-3">
+          <div class="col-md-8">
+            <label class="form-label">{{ form.name.label }}</label>
+            {{ form.name }}
+            {% for e in form.name.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+          </div>
+          <div class="col-md-4 d-flex align-items-end">
+            <div class="form-check">
+              {{ form.active }}
+              <label class="form-check-label">{{ form.active.label }}</label>
+            </div>
+          </div>
+          <div class="col-12">
+            <label class="form-label">{{ form.description.label }}</label>
+            {{ form.description }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card shadow-sm mb-3">
+      <div class="card-body">
+        <h2 class="h5 mb-1">Permisos</h2>
+        <p class="text-muted small">Usa <strong>Ver</strong> para consultar un módulo y <strong>Gestionar</strong> para crear, editar y administrar dentro de él.</p>
+
+        {% for modulo, permisos in permisos_agrupados.items %}
+          <div class="mb-3">
+            <h3 class="h6 text-primary">{{ modulo }}</h3>
+            <div class="row">
+              {% for p in permisos %}
+                <div class="col-md-6">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="permissions"
+                           value="{{ p.permission.id }}"
+                           id="perm{{ p.permission.id }}"
+                           {% if p.permission.id in seleccionados %}checked{% endif %}>
+                    <label class="form-check-label" for="perm{{ p.permission.id }}">
+                      {{ p.accion }} <small class="text-muted d-block">{{ p.descripcion }}</small>
+                    </label>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        {% empty %}
+          <p class="text-muted mb-0">No hay permisos cargados. Ejecuta <code>python manage.py migrate</code>.</p>
+        {% endfor %}
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar rol</button>
+    <a href="{% url 'usuarios:rol_list' %}" class="btn btn-outline-secondary">Cancelar</a>
+  </form>
+{% endblock %}

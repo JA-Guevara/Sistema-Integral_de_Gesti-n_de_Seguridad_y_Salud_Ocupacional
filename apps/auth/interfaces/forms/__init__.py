@@ -1,21 +1,35 @@
-"""Formularios del módulo de autenticación.
+"""Shared form helpers for the authentication app."""
 
-Define un mixin reutilizable para aplicar las clases de Bootstrap 5 a
-cualquier formulario, evitando repetir estilos campo por campo (DRY).
-"""
+from django import forms
 
 
 class BootstrapFormMixin:
-    """Aplica clases de Bootstrap 5 a todos los campos del formulario.
+    """Apply Bootstrap 5 classes to Django form widgets."""
 
-    Debe declararse ANTES que la clase de formulario en la herencia, p. ej.:
-        class LoginForm(BootstrapFormMixin, forms.Form): ...
-    """
+    default_class = "form-control"
+    checkbox_class = "form-check-input"
+    select_class = "form-select"
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self._apply_bootstrap_classes()
+
+    def _apply_bootstrap_classes(self):
         for field in self.fields.values():
-            css = field.widget.attrs.get('class', '')
-            field.widget.attrs['class'] = (css + ' form-control').strip()
-            # Usa la etiqueta del campo como placeholder si no hay uno definido.
-            field.widget.attrs.setdefault('placeholder', field.label)
+            widget = field.widget
+
+            if isinstance(widget, forms.HiddenInput):
+                continue
+
+            if isinstance(widget, forms.CheckboxInput):
+                css_class = self.checkbox_class
+            elif isinstance(widget, forms.Select):
+                css_class = self.select_class
+            else:
+                css_class = self.default_class
+
+            existing = widget.attrs.get("class", "")
+            widget.attrs["class"] = f"{existing} {css_class}".strip()
+
+
+__all__ = ["BootstrapFormMixin"]

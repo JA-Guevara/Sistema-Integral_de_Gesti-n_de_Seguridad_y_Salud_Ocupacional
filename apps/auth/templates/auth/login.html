@@ -1,4 +1,4 @@
-{% extends 'auth/base.html' %}
+{% extends 'base.html' %}
 {% block title %}Iniciar sesión{% endblock %}
 
 {% block content %}
@@ -12,7 +12,7 @@
           {% csrf_token %}
           <!-- Conserva el destino original al exigir login (Punto 8) -->
           <input type="hidden" name="next" value="{{ request.GET.next }}">
-          {% include 'auth/_form_fields.html' %}
+          {% include 'partials/form_fields.html' %}
           <button type="submit" class="btn btn-primary w-100">Ingresar</button>
         </form>
 

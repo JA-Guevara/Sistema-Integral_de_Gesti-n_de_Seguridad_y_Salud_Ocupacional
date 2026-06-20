@@ -24,6 +24,12 @@ urlpatterns = [
     # Módulo de autenticación (namespace 'auth')
     path('auth/', include('apps.auth.urls')),
 
-    # La raíz redirige al login del módulo de autenticación.
-    path('', RedirectView.as_view(pattern_name='auth:login', permanent=False)),
+    # Panel de control (namespace 'dashboard')
+    path('dashboard/', include('apps.dashboard.urls')),
+
+    # Usuarios, roles y permisos (namespace 'usuarios')
+    path('usuarios/', include('apps.usuarios.urls')),
+
+    # La raíz redirige al dashboard (si no hay sesión, este redirige al login).
+    path('', RedirectView.as_view(pattern_name='dashboard:index', permanent=False)),
 ]

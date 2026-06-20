@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}Roles y permisos{% endblock %}
+
+{% block content %}
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+    <div>
+      <p class="text-muted small mb-0 text-uppercase">Administración</p>
+      <h1 class="h3 mb-0">Roles y permisos</h1>
+    </div>
+    <div class="d-flex gap-2">
+      <a href="{% url 'usuarios:user_list' %}" class="btn btn-outline-primary">Usuarios</a>
+      {% if perms.usuarios.gestionar_roles %}
+        <a href="{% url 'usuarios:rol_create' %}" class="btn btn-primary">Nuevo rol</a>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Rol</th>
+            <th>Descripción</th>
+            <th class="text-center">Permisos</th>
+            <th class="text-center">Usuarios</th>
+            <th class="text-center">Estado</th>
+            <th class="text-end">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for rol in roles %}
+            <tr>
+              <td class="fw-semibold">{{ rol.name }}</td>
+              <td class="text-muted small">{{ rol.perfil.descripcion|default:"—" }}</td>
+              <td class="text-center">{{ rol.permissions.count }}</td>
+              <td class="text-center">{{ rol.user_set.count }}</td>
+              <td class="text-center">
+                {% if rol.perfil.activo %}
+                  <span class="badge text-bg-success">Activo</span>
+                {% else %}
+                  <span class="badge text-bg-danger">Inactivo</span>
+                {% endif %}
+              </td>
+              <td class="text-end">
+                <a href="{% url 'usuarios:rol_detail' rol.id %}" class="btn btn-sm btn-outline-secondary" title="Ver"><i class="bi bi-eye"></i></a>
+                {% if perms.usuarios.gestionar_roles %}
+                  <a href="{% url 'usuarios:rol_update' rol.id %}" class="btn btn-sm btn-outline-primary" title="Editar"><i class="bi bi-pencil"></i></a>
+                  <form method="post" action="{% url 'usuarios:rol_toggle' rol.id %}" class="d-inline">
+                    {% csrf_token %}
+                    {% if rol.perfil.activo %}
+                      <button class="btn btn-sm btn-outline-danger" title="Desactivar"><i class="bi bi-toggle-off"></i></button>
+                    {% else %}
+                      <button class="btn btn-sm btn-outline-success" title="Activar"><i class="bi bi-toggle-on"></i></button>
+                    {% endif %}
+                  </form>
+                {% endif %}
+              </td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="6" class="text-center text-muted py-4">Todavía no hay roles. Crea el primero o ejecuta <code>seed_roles</code>.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}

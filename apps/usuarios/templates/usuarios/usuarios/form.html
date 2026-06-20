@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block title %}{{ usuario|yesno:"Editar usuario,Nuevo usuario" }}{% endblock %}
+
+{% block content %}
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">{{ usuario|yesno:"Editar usuario,Nuevo usuario" }}</h1>
+    <a href="{% url 'usuarios:user_list' %}" class="btn btn-outline-secondary">Volver</a>
+  </div>
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+
+    <div class="card shadow-sm mb-3">
+      <div class="card-body">
+        <h2 class="h5 mb-3">Datos del usuario</h2>
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label">{{ form.username.label }}</label>
+            {{ form.username }}
+            {% for e in form.username.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">{{ form.first_name.label }}</label>
+            {{ form.first_name }}
+            {% for e in form.first_name.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">{{ form.last_name.label }}</label>
+            {{ form.last_name }}
+            {% for e in form.last_name.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">{{ form.email.label }}</label>
+            {{ form.email }}
+            {% for e in form.email.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">{{ form.password.label }}</label>
+            {{ form.password }}
+            {% if form.password.help_text %}<div class="form-text">{{ form.password.help_text }}</div>{% endif %}
+            {% for e in form.password.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+          </div>
+          <div class="col-12">
+            <div class="form-check">
+              {{ form.is_active }}
+              <label class="form-check-label">{{ form.is_active.label }}</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card shadow-sm mb-3">
+      <div class="card-body">
+        <h2 class="h5 mb-3">Roles</h2>
+        <div class="row">
+          {% for checkbox in form.groups %}
+            <div class="col-md-4">
+              <div class="form-check">
+                {{ checkbox.tag }}
+                <label class="form-check-label">{{ checkbox.choice_label }}</label>
+              </div>
+            </div>
+          {% empty %}
+            <p class="text-muted mb-0">No hay roles creados todavía.</p>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar usuario</button>
+    <a href="{% url 'usuarios:user_list' %}" class="btn btn-outline-secondary">Cancelar</a>
+  </form>
+{% endblock %}

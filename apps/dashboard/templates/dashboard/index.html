@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+{% block title %}Inicio{% endblock %}
+
+{% block content %}
+  <section class="hero-panel mb-4" data-reveal>
+    <div class="hero-content">
+      <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
+        <div>
+          <span class="hero-badge mb-3">
+            <i class="bi bi-shield-check"></i>
+            Gestión de competencias SySO
+          </span>
+          <h1 class="h2 mb-2">Hola, {{ user.get_full_name|default:user.username }}</h1>
+          <p class="mb-0 text-white-50">
+            Control de usuarios, roles, evaluaciones, capacitaciones y evidencias para auditoría.
+          </p>
+        </div>
+        <div class="d-flex flex-wrap gap-2">
+          {% for grupo in user.groups.all %}
+            <span class="badge text-bg-light text-dark">{{ grupo.name }}</span>
+          {% empty %}
+            {% if user.is_superuser %}
+              <span class="badge text-bg-danger">Administrador</span>
+            {% else %}
+              <span class="badge text-bg-light text-dark">Sin rol asignado</span>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="row g-3 mb-4">
+    <div class="col-6 col-xl-3" data-reveal>
+      <div class="stat-card h-100">
+        <div class="d-flex justify-content-between align-items-start mb-3">
+          <span class="text-muted small fw-semibold">Usuarios</span>
+          <span class="stat-icon"><i class="bi bi-people-fill"></i></span>
+        </div>
+        <div class="stat-value">{{ summary.usuarios|default_if_none:"-" }}</div>
+        <span class="text-muted small">Cuentas registradas</span>
+      </div>
+    </div>
+
+    <div class="col-6 col-xl-3" data-reveal>
+      <div class="stat-card h-100">
+        <div class="d-flex justify-content-between align-items-start mb-3">
+          <span class="text-muted small fw-semibold">Trabajadores</span>
+          <span class="stat-icon green"><i class="bi bi-person-badge-fill"></i></span>
+        </div>
+        <div class="stat-value">{{ summary.trabajadores|default_if_none:"-" }}</div>
+        <span class="text-muted small">Perfiles por riesgo</span>
+      </div>
+    </div>
+
+    <div class="col-6 col-xl-3" data-reveal>
+      <div class="stat-card h-100">
+        <div class="d-flex justify-content-between align-items-start mb-3">
+          <span class="text-muted small fw-semibold">Evaluaciones</span>
+          <span class="stat-icon orange"><i class="bi bi-clipboard-check-fill"></i></span>
+        </div>
+        <div class="stat-value">{{ summary.evaluaciones|default_if_none:"-" }}</div>
+        <span class="text-muted small">Tests de seguridad</span>
+      </div>
+    </div>
+
+    <div class="col-6 col-xl-3" data-reveal>
+      <div class="stat-card h-100">
+        <div class="d-flex justify-content-between align-items-start mb-3">
+          <span class="text-muted small fw-semibold">Capacitaciones</span>
+          <span class="stat-icon red"><i class="bi bi-mortarboard-fill"></i></span>
+        </div>
+        <div class="stat-value">{{ summary.capacitaciones|default_if_none:"-" }}</div>
+        <span class="text-muted small">Planes asignados</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="row g-4">
+    <section class="col-xl-8">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+          <span class="eyebrow">Operación</span>
+          <h2 class="h5 mb-0">Módulos del sistema</h2>
+        </div>
+      </div>
+
+      <div class="row g-3">
+        {% if perms.usuarios.ver_usuarios %}
+          <div class="col-md-6" data-reveal>
+            <div class="module-card h-100">
+              <div class="d-flex justify-content-between align-items-start mb-3">
+                <span class="module-icon"><i class="bi bi-people"></i></span>
+                <a href="{% url 'usuarios:user_list' %}" class="btn btn-sm btn-outline-primary">Abrir</a>
+              </div>
+              <h3 class="h6 mb-1">Usuarios y roles</h3>
+              <p class="text-muted small mb-0">Administra cuentas, permisos y perfiles de acceso.</p>
+            </div>
+          </div>
+        {% endif %}
+
+        <div class="col-md-6" data-reveal>
+          <div class="module-card h-100">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+              <span class="module-icon"><i class="bi bi-person-badge"></i></span>
+              <span class="badge text-bg-light text-dark border">Pendiente</span>
+            </div>
+            <h3 class="h6 mb-1">Trabajadores</h3>
+            <p class="text-muted small mb-0">Registro de personal, cargo, área y nivel de riesgo.</p>
+          </div>
+        </div>
+
+        <div class="col-md-6" data-reveal>
+          <div class="module-card h-100">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+              <span class="module-icon"><i class="bi bi-clipboard-check"></i></span>
+              <span class="badge text-bg-light text-dark border">Pendiente</span>
+            </div>
+            <h3 class="h6 mb-1">Evaluaciones</h3>
+            <p class="text-muted small mb-0">Tests de competencias, preguntas, respuestas y puntajes.</p>
+          </div>
+        </div>
+
+        <div class="col-md-6" data-reveal>
+          <div class="module-card h-100">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+              <span class="module-icon"><i class="bi bi-file-earmark-pdf"></i></span>
+              <span class="badge text-bg-light text-dark border">Pendiente</span>
+            </div>
+            <h3 class="h6 mb-1">Reportes</h3>
+            <p class="text-muted small mb-0">Evidencia exportable para auditorías y cumplimiento.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="col-xl-4">
+      <div class="workflow-panel h-100" data-reveal>
+        <span class="eyebrow">Flujo SySO</span>
+        <h2 class="h5 mb-3">Ciclo de calidad</h2>
+
+        <div class="timeline">
+          <div class="timeline-item">
+            <span class="timeline-step">1</span>
+            <div>
+              <h3 class="h6 mb-1">Registrar personal</h3>
+              <p class="text-muted small mb-0">Datos, rol operativo y exposición al riesgo.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <span class="timeline-step">2</span>
+            <div>
+              <h3 class="h6 mb-1">Evaluar competencias</h3>
+              <p class="text-muted small mb-0">Pruebas de seguridad, EPP y respuesta ante emergencias.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <span class="timeline-step">3</span>
+            <div>
+              <h3 class="h6 mb-1">Detectar brechas</h3>
+              <p class="text-muted small mb-0">Resultados por trabajador, área y tipo de riesgo.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <span class="timeline-step">4</span>
+            <div>
+              <h3 class="h6 mb-1">Capacitar y reportar</h3>
+              <p class="text-muted small mb-0">Planes de formación y respaldo documental.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+{% endblock %}

@@ -23,6 +23,9 @@ PERMISSION_CATALOG = [
     {'codename': 'ver_evaluaciones',       'modulo': 'Evaluaciones',   'accion': 'Ver',       'descripcion': 'Ver evaluaciones de competencias'},
     {'codename': 'gestionar_evaluaciones', 'modulo': 'Evaluaciones',   'accion': 'Gestionar', 'descripcion': 'Crear, asignar y calificar evaluaciones'},
 
+    {'codename': 'ver_analytics',          'modulo': 'Analítica',      'accion': 'Ver',       'descripcion': 'Ver diagnóstico de competencias y brechas'},
+    {'codename': 'gestionar_analytics',    'modulo': 'Analítica',      'accion': 'Gestionar', 'descripcion': 'Procesar análisis y validar/descartar brechas'},
+
     {'codename': 'ver_capacitaciones',       'modulo': 'Capacitaciones', 'accion': 'Ver',       'descripcion': 'Ver capacitaciones'},
     {'codename': 'gestionar_capacitaciones', 'modulo': 'Capacitaciones', 'accion': 'Gestionar', 'descripcion': 'Registrar, asignar y dar seguimiento a capacitaciones'},
 

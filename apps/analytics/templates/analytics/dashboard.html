@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}Analítica{% endblock %}
+{% block topbar_title %}Analítica{% endblock %}
+
+{% block content %}
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4" data-reveal>
+    <div>
+      <p class="eyebrow mb-0">Diferencial</p>
+      <h1 class="h3 mb-0">Analítica de competencias</h1>
+    </div>
+    {% if perms.usuarios.gestionar_analytics %}
+      <form method="post" action="{% url 'analytics:procesar_todos' %}" data-confirm="¿Ejecutar el análisis sobre todos los trabajadores activos?">
+        {% csrf_token %}
+        <button class="btn btn-primary"><i class="bi bi-cpu me-1"></i> Analizar todos</button>
+      </form>
+    {% endif %}
+  </div>
+
+  <div class="alert alert-info" data-reveal>
+    <i class="bi bi-info-circle me-1"></i> La analítica <strong>solo diagnostica y recomienda</strong>; la validación final de cada brecha la realiza el Responsable SySO.
+  </div>
+
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-lg-3" data-reveal><div class="stat-card"><span class="stat-icon orange"><i class="bi bi-exclamation-triangle-fill"></i></span><div class="stat-value mt-3">{{ resumen.sugeridas }}</div><div class="text-muted small">Brechas sugeridas</div></div></div>
+    <div class="col-6 col-lg-3" data-reveal><div class="stat-card"><span class="stat-icon green"><i class="bi bi-patch-check-fill"></i></span><div class="stat-value mt-3">{{ resumen.validadas }}</div><div class="text-muted small">Brechas validadas</div></div></div>
+    <div class="col-6 col-lg-3" data-reveal><div class="stat-card"><span class="stat-icon teal"><i class="bi bi-people-fill"></i></span><div class="stat-value mt-3">{{ resumen.trabajadores_con_brecha }}</div><div class="text-muted small">Trabajadores con brecha</div></div></div>
+    <div class="col-6 col-lg-3" data-reveal><div class="stat-card"><span class="stat-icon mint"><i class="bi bi-graph-up"></i></span><div class="stat-value mt-3">{{ resumen.competencia_media }}</div><div class="text-muted small">Competencia media (%)</div></div></div>
+  </div>
+
+  <div class="card shadow-sm" data-reveal><div class="card-body">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2 class="h5 mb-0">Brechas sugeridas recientes</h2>
+      <a href="{% url 'analytics:brechas' %}" class="btn btn-sm btn-outline-primary">Ver todas</a>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-light"><tr><th>Trabajador</th><th>Área</th><th class="text-center">Nivel</th><th>Descripción</th></tr></thead>
+        <tbody>
+          {% for b in sugeridas %}
+            <tr>
+              <td><a href="{% url 'analytics:diagnostico' b.trabajador.id %}">{{ b.trabajador.nombre_completo }}</a></td>
+              <td>{{ b.area_tema }}</td>
+              <td class="text-center"><span class="badge text-bg-danger">{{ b.nivel_detectado }}</span></td>
+              <td class="text-muted small">{{ b.descripcion }}</td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="4" class="text-muted text-center py-4">No hay brechas sugeridas. Ejecuta «Analizar todos» tras registrar rendiciones.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div></div>
+{% endblock %}

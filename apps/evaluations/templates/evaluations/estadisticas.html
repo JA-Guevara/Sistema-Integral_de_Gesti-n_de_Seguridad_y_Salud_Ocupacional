@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Estadísticas · {{ evaluacion.titulo }}{% endblock %}
+{% block topbar_title %}Evaluaciones{% endblock %}
+
+{% block content %}
+  <div class="d-flex justify-content-between align-items-center mb-4" data-reveal>
+    <div>
+      <p class="eyebrow mb-0">{{ evaluacion.titulo }}</p>
+      <h1 class="h3 mb-0">Estadísticas</h1>
+    </div>
+    <a href="{% url 'evaluations:detalle' evaluacion.id %}" class="btn btn-outline-secondary">Volver</a>
+  </div>
+
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-lg-3" data-reveal><div class="stat-card"><span class="stat-icon teal"><i class="bi bi-people-fill"></i></span><div class="stat-value mt-3">{{ stats.asignados }}</div><div class="text-muted small">Asignados</div></div></div>
+    <div class="col-6 col-lg-3" data-reveal><div class="stat-card"><span class="stat-icon mint"><i class="bi bi-pencil-fill"></i></span><div class="stat-value mt-3">{{ stats.rendidos }}</div><div class="text-muted small">Rendidos</div></div></div>
+    <div class="col-6 col-lg-3" data-reveal><div class="stat-card"><span class="stat-icon green"><i class="bi bi-check2-circle"></i></span><div class="stat-value mt-3">{{ stats.aprobados }}</div><div class="text-muted small">Aprobados</div></div></div>
+    <div class="col-6 col-lg-3" data-reveal><div class="stat-card"><span class="stat-icon orange"><i class="bi bi-x-circle"></i></span><div class="stat-value mt-3">{{ stats.reprobados }}</div><div class="text-muted small">Reprobados</div></div></div>
+  </div>
+
+  <div class="card shadow-sm" data-reveal><div class="card-body">
+    <div class="d-flex justify-content-between mb-1"><span class="fw-semibold">Tasa de aprobación</span><span>{{ stats.tasa_aprobacion }}%</span></div>
+    <div class="progress mb-3" role="progressbar" style="height: 14px;">
+      <div class="progress-bar bg-success" style="width: {{ stats.tasa_aprobacion }}%;"></div>
+    </div>
+    <div class="d-flex justify-content-between"><span class="fw-semibold">Promedio general</span><span>{{ stats.promedio }}%</span></div>
+  </div></div>
+{% endblock %}

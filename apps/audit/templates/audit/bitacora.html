@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Bitácora{% endblock %}
+{% block topbar_title %}Bitácora{% endblock %}
+
+{% block content %}
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4" data-reveal>
+    <div><p class="eyebrow mb-0">Auditoría</p><h1 class="h3 mb-0">Bitácora del sistema</h1></div>
+    <form method="get" class="d-flex gap-2">
+      <select name="modulo" class="form-select form-select-sm" onchange="this.form.submit()">
+        <option value="">Todos los módulos</option>
+        {% for m in modulos %}<option value="{{ m }}" {% if modulo_actual == m %}selected{% endif %}>{{ m }}</option>{% endfor %}
+      </select>
+    </form>
+  </div>
+
+  <div class="mb-3" style="max-width: 380px;" data-reveal>
+    <div class="input-group"><span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+      <input type="search" class="form-control" placeholder="Buscar en la bitácora…" data-table-filter="#tabla-bitacora"></div>
+  </div>
+
+  <div class="card shadow-sm" data-reveal><div class="table-responsive">
+    <table id="tabla-bitacora" class="table table-hover align-middle mb-0">
+      <thead class="table-light"><tr><th>Fecha</th><th>Usuario</th><th>Acción</th><th>Módulo</th><th>Descripción</th><th>IP</th></tr></thead>
+      <tbody>
+        {% for r in registros %}
+          <tr data-row>
+            <td class="small text-nowrap">{{ r.fecha|date:"d/m/Y H:i" }}</td>
+            <td class="small">{{ r.usuario.username|default:"—" }}</td>
+            <td><span class="badge text-bg-secondary">{{ r.accion }}</span></td>
+            <td class="small">{{ r.modulo }}</td>
+            <td class="small">{{ r.descripcion }}</td>
+            <td class="small text-muted">{{ r.ip|default:"—" }}</td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="6" class="text-center text-muted py-4">La bitácora está vacía.</td></tr>
+        {% endfor %}
+        <tr class="filtro-vacio" data-filter-empty><td colspan="6" class="text-center text-muted py-4">Sin coincidencias.</td></tr>
+      </tbody>
+    </table>
+  </div></div>
+{% endblock %}

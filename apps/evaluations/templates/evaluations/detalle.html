@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block title %}{{ evaluacion.titulo }}{% endblock %}
+{% block topbar_title %}Evaluaciones{% endblock %}
+
+{% block content %}
+  <div class="d-flex flex-wrap justify-content-between align-items-start mb-4" data-reveal>
+    <div>
+      <h1 class="h3 mb-1">{{ evaluacion.titulo }}</h1>
+      {% with e=evaluacion %}{% include 'evaluations/_estado_badge.html' %}{% endwith %}
+      <span class="text-muted ms-2">{{ evaluacion.area_tema }} · umbral {{ evaluacion.umbral_aprobacion }}%</span>
+    </div>
+    <a href="{% url 'evaluations:lista' %}" class="btn btn-outline-secondary">Volver</a>
+  </div>
+
+  {% if perms.usuarios.gestionar_evaluaciones %}
+  <div class="card shadow-sm mb-3" data-reveal><div class="card-body d-flex flex-wrap gap-2">
+    {% if evaluacion.estado == 'borrador' %}
+      <a href="{% url 'evaluations:editar' evaluacion.id %}" class="btn btn-sm btn-outline-primary">Editar</a>
+      <a href="{% url 'evaluations:preguntas' evaluacion.id %}" class="btn btn-sm btn-outline-primary">Preguntas</a>
+      <form method="post" action="{% url 'evaluations:estado' evaluacion.id %}" data-confirm="¿Publicar esta evaluación?">{% csrf_token %}<input type="hidden" name="estado" value="publicada"><button class="btn btn-sm btn-primary">Publicar</button></form>
+    {% elif evaluacion.estado == 'publicada' %}
+      <form method="post" action="{% url 'evaluations:estado' evaluacion.id %}">{% csrf_token %}<input type="hidden" name="estado" value="abierta"><button class="btn btn-sm btn-success">Abrir</button></form>
+      <a href="{% url 'evaluations:asignar' evaluacion.id %}" class="btn btn-sm btn-outline-primary">Asignar</a>
+    {% elif evaluacion.estado == 'abierta' %}
+      <a href="{% url 'evaluations:asignar' evaluacion.id %}" class="btn btn-sm btn-outline-primary">Asignar</a>
+      <form method="post" action="{% url 'evaluations:estado' evaluacion.id %}" data-confirm="¿Cerrar la evaluación?">{% csrf_token %}<input type="hidden" name="estado" value="cerrada"><button class="btn btn-sm btn-outline-dark">Cerrar</button></form>
+    {% elif evaluacion.estado == 'cerrada' %}
+      <form method="post" action="{% url 'evaluations:estado' evaluacion.id %}">{% csrf_token %}<input type="hidden" name="estado" value="archivada"><button class="btn btn-sm btn-outline-secondary">Archivar</button></form>
+    {% endif %}
+    <a href="{% url 'evaluations:estadisticas' evaluacion.id %}" class="btn btn-sm btn-outline-primary ms-auto">Estadísticas</a>
+    {% if evaluacion.estado == 'borrador' or evaluacion.estado == 'publicada' or evaluacion.estado == 'abierta' %}
+      <form method="post" action="{% url 'evaluations:estado' evaluacion.id %}" data-confirm="¿Cancelar la evaluación? No se podrá revertir.">{% csrf_token %}<input type="hidden" name="estado" value="cancelada"><button class="btn btn-sm btn-outline-danger">Cancelar evaluación</button></form>
+    {% endif %}
+  </div></div>
+  {% endif %}
+
+  <div class="row g-3">
+    <div class="col-lg-6" data-reveal>
+      <div class="card shadow-sm h-100"><div class="card-body">
+        <h2 class="h5 mb-3">Preguntas ({{ preguntas|length }})</h2>
+        {% for p in preguntas %}
+          <div class="border-bottom py-2">
+            <div class="fw-semibold small">{{ forloop.counter }}. {{ p.enunciado }}</div>
+            <div class="text-muted small">{{ p.opciones.count }} opciones · ponderación {{ p.ponderacion }}</div>
+          </div>
+        {% empty %}
+          <p class="text-muted mb-0">Sin preguntas todavía.</p>
+        {% endfor %}
+      </div></div>
+    </div>
+
+    <div class="col-lg-6" data-reveal>
+      <div class="card shadow-sm h-100"><div class="card-body">
+        <h2 class="h5 mb-3">Asignaciones ({{ asignaciones|length }})</h2>
+        <div class="table-responsive">
+          <table class="table table-sm align-middle mb-0">
+            <tbody>
+              {% for a in asignaciones %}
+                <tr>
+                  <td>{{ a.trabajador.nombre_completo }}</td>
+                  <td class="text-center">
+                    {% if a.estado == 'completada' %}<span class="badge text-bg-success">Completada</span>
+                    {% elif a.estado == 'vencida' %}<span class="badge text-bg-danger">Vencida</span>
+                    {% else %}<span class="badge text-bg-secondary">Pendiente</span>{% endif %}
+                  </td>
+                  <td class="text-end">
+                    {% if a.estado == 'pendiente' and evaluacion.admite_rendicion %}
+                      <a href="{% url 'evaluations:resolver' a.id %}" class="btn btn-sm btn-primary">Rendir</a>
+                    {% endif %}
+                  </td>
+                </tr>
+              {% empty %}
+                <tr><td class="text-muted">Sin trabajadores asignados.</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div></div>
+    </div>
+  </div>
+{% endblock %}

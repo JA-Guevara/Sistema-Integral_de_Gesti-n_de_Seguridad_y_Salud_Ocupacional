@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Resultado{% endblock %}
+{% block topbar_title %}Resultado{% endblock %}
+
+{% block content %}
+  <div class="row justify-content-center" data-reveal>
+    <div class="col-md-6">
+      <div class="card shadow-sm text-center">
+        <div class="card-body p-4">
+          {% if resultado.aprobado %}
+            <i class="bi bi-patch-check-fill text-success" style="font-size:3rem;"></i>
+            <h1 class="h4 mt-2">¡Aprobado!</h1>
+          {% else %}
+            <i class="bi bi-x-octagon-fill text-danger" style="font-size:3rem;"></i>
+            <h1 class="h4 mt-2">No aprobado</h1>
+          {% endif %}
+          <p class="text-muted">{{ asignacion.trabajador.nombre_completo }} · {{ asignacion.evaluacion.titulo }}</p>
+
+          <div class="display-4 fw-bold {% if resultado.aprobado %}text-success{% else %}text-danger{% endif %}">{{ resultado.porcentaje|floatformat:0 }}%</div>
+          <p class="text-muted">{{ resultado.puntaje_obtenido }} / {{ resultado.puntaje_total }} puntos · umbral {{ asignacion.evaluacion.umbral_aprobacion }}%</p>
+
+          <a href="{% url 'evaluations:detalle' asignacion.evaluacion_id %}" class="btn btn-primary mt-2">Volver a la evaluación</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block title %}{{ trabajador|yesno:"Editar trabajador,Nuevo trabajador" }}{% endblock %}
+{% block topbar_title %}Trabajadores{% endblock %}
+
+{% block content %}
+  <div class="d-flex justify-content-between align-items-center mb-4" data-reveal>
+    <h1 class="h3 mb-0">{{ trabajador|yesno:"Editar trabajador,Nuevo trabajador" }}</h1>
+    <a href="{% url 'workers:trabajador_list' %}" class="btn btn-outline-secondary">Volver</a>
+  </div>
+
+  <form method="post" novalidate data-reveal>
+    {% csrf_token %}
+    <div class="card shadow-sm mb-3">
+      <div class="card-body">
+        <h2 class="h5 mb-3">Datos del trabajador</h2>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Empresa</label>{{ form.empresa }}
+            {% for e in form.empresa.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Documento de identidad</label>{{ form.documento }}
+            {% for e in form.documento.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Nombres</label>{{ form.nombres }}
+            {% for e in form.nombres.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Apellidos</label>{{ form.apellidos }}
+            {% for e in form.apellidos.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Cargo</label>{{ form.cargo }}
+            {% for e in form.cargo.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Área</label>{{ form.area }}
+            {% for e in form.area.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Nivel de riesgo</label>{{ form.nivel_riesgo }}
+            {% for e in form.nivel_riesgo.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Supervisor <span class="text-muted">(opcional)</span></label>{{ form.supervisor }}
+            {% for e in form.supervisor.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Estado</label>{{ form.estado }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar trabajador</button>
+    <a href="{% url 'workers:trabajador_list' %}" class="btn btn-outline-secondary">Cancelar</a>
+  </form>
+{% endblock %}

@@ -27,24 +27,59 @@
           <span>Roles</span>
         </a>
       {% endif %}
+      {% if perms.usuarios.ver_bitacora %}
+        <a class="sidebar-link {% if namespace == 'audit' %}active{% endif %}" href="{% url 'audit:bitacora' %}">
+          <i class="bi bi-journal-text"></i>
+          <span>Bitácora</span>
+        </a>
+      {% endif %}
 
       <span class="sidebar-label">Módulos SySO</span>
-      <a class="sidebar-link disabled" href="#" aria-disabled="true">
-        <i class="bi bi-person-badge"></i>
-        <span>Trabajadores</span>
-      </a>
-      <a class="sidebar-link disabled" href="#" aria-disabled="true">
-        <i class="bi bi-clipboard-check"></i>
-        <span>Evaluaciones</span>
-      </a>
-      <a class="sidebar-link disabled" href="#" aria-disabled="true">
-        <i class="bi bi-mortarboard"></i>
-        <span>Capacitaciones</span>
-      </a>
-      <a class="sidebar-link disabled" href="#" aria-disabled="true">
-        <i class="bi bi-file-earmark-pdf"></i>
-        <span>Reportes</span>
-      </a>
+      {% if perms.usuarios.ver_trabajadores %}
+        <a class="sidebar-link {% if namespace == 'workers' %}active{% endif %}" href="{% url 'workers:trabajador_list' %}">
+          <i class="bi bi-person-badge"></i>
+          <span>Trabajadores</span>
+        </a>
+      {% else %}
+        <a class="sidebar-link disabled" href="#" aria-disabled="true">
+          <i class="bi bi-person-badge"></i>
+          <span>Trabajadores</span>
+        </a>
+      {% endif %}
+      {% if perms.usuarios.ver_evaluaciones %}
+        <a class="sidebar-link {% if namespace == 'evaluations' %}active{% endif %}" href="{% url 'evaluations:lista' %}">
+          <i class="bi bi-clipboard-check"></i>
+          <span>Evaluaciones</span>
+        </a>
+      {% else %}
+        <a class="sidebar-link disabled" href="#" aria-disabled="true">
+          <i class="bi bi-clipboard-check"></i>
+          <span>Evaluaciones</span>
+        </a>
+      {% endif %}
+      {% if perms.usuarios.ver_analytics %}
+        <a class="sidebar-link {% if namespace == 'analytics' %}active{% endif %}" href="{% url 'analytics:dashboard' %}">
+          <i class="bi bi-graph-up-arrow"></i>
+          <span>Analítica</span>
+        </a>
+      {% endif %}
+      {% if perms.usuarios.ver_capacitaciones %}
+        <a class="sidebar-link {% if namespace == 'training' %}active{% endif %}" href="{% url 'training:lista' %}">
+          <i class="bi bi-mortarboard"></i>
+          <span>Capacitaciones</span>
+        </a>
+      {% endif %}
+      {% if perms.usuarios.ver_reportes %}
+        <a class="sidebar-link {% if namespace == 'reports' %}active{% endif %}" href="{% url 'reports:dashboard' %}">
+          <i class="bi bi-file-earmark-pdf"></i>
+          <span>Reportes</span>
+        </a>
+      {% else %}
+        <a class="sidebar-link disabled" href="#" aria-disabled="true">
+          <i class="bi bi-file-earmark-pdf"></i>
+          <span>Reportes</span>
+        </a>
+      {% endif %}
     </nav>
 
     <div class="sidebar-footer">
@@ -82,11 +117,34 @@
             <span>Roles</span>
           </a>
         {% endif %}
+        {% if perms.usuarios.ver_bitacora %}
+          <a class="sidebar-link {% if namespace == 'audit' %}active{% endif %}" href="{% url 'audit:bitacora' %}">
+            <i class="bi bi-journal-text"></i>
+            <span>Bitácora</span>
+          </a>
+        {% endif %}
         <span class="sidebar-label">Módulos SySO</span>
-        <a class="sidebar-link disabled" href="#" aria-disabled="true"><i class="bi bi-person-badge"></i><span>Trabajadores</span></a>
-        <a class="sidebar-link disabled" href="#" aria-disabled="true"><i class="bi bi-clipboard-check"></i><span>Evaluaciones</span></a>
-        <a class="sidebar-link disabled" href="#" aria-disabled="true"><i class="bi bi-mortarboard"></i><span>Capacitaciones</span></a>
-        <a class="sidebar-link disabled" href="#" aria-disabled="true"><i class="bi bi-file-earmark-pdf"></i><span>Reportes</span></a>
+        {% if perms.usuarios.ver_trabajadores %}
+          <a class="sidebar-link {% if namespace == 'workers' %}active{% endif %}" href="{% url 'workers:trabajador_list' %}"><i class="bi bi-person-badge"></i><span>Trabajadores</span></a>
+        {% else %}
+          <a class="sidebar-link disabled" href="#" aria-disabled="true"><i class="bi bi-person-badge"></i><span>Trabajadores</span></a>
+        {% endif %}
+        {% if perms.usuarios.ver_evaluaciones %}
+          <a class="sidebar-link {% if namespace == 'evaluations' %}active{% endif %}" href="{% url 'evaluations:lista' %}"><i class="bi bi-clipboard-check"></i><span>Evaluaciones</span></a>
+        {% else %}
+          <a class="sidebar-link disabled" href="#" aria-disabled="true"><i class="bi bi-clipboard-check"></i><span>Evaluaciones</span></a>
+        {% endif %}
+        {% if perms.usuarios.ver_analytics %}
+          <a class="sidebar-link {% if namespace == 'analytics' %}active{% endif %}" href="{% url 'analytics:dashboard' %}"><i class="bi bi-graph-up-arrow"></i><span>Analítica</span></a>
+        {% endif %}
+        {% if perms.usuarios.ver_capacitaciones %}
+          <a class="sidebar-link {% if namespace == 'training' %}active{% endif %}" href="{% url 'training:lista' %}"><i class="bi bi-mortarboard"></i><span>Capacitaciones</span></a>
+        {% endif %}
+        {% if perms.usuarios.ver_reportes %}
+          <a class="sidebar-link {% if namespace == 'reports' %}active{% endif %}" href="{% url 'reports:dashboard' %}"><i class="bi bi-file-earmark-pdf"></i><span>Reportes</span></a>
+        {% else %}
+          <a class="sidebar-link disabled" href="#" aria-disabled="true"><i class="bi bi-file-earmark-pdf"></i><span>Reportes</span></a>
+        {% endif %}
       </nav>
     </div>
   </div>

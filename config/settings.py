@@ -25,6 +25,12 @@ INSTALLED_APPS = [
     "apps.auth.apps.AuthConfig",
     "apps.dashboard.apps.DashboardConfig",
     "apps.usuarios.apps.UsuariosConfig",
+    "apps.workers.apps.WorkersConfig",
+    "apps.evaluations.apps.EvaluationsConfig",
+    "apps.analytics.apps.AnalyticsConfig",
+    "apps.training.apps.TrainingConfig",
+    "apps.reports.apps.ReportsConfig",
+    "apps.audit.apps.AuditConfig",
 ]
 
 MIDDLEWARE = [
@@ -35,6 +41,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    # Expone el request actual a la capa de auditoría (debe ir tras Authentication).
+    "apps.audit.middleware.CurrentRequestMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"

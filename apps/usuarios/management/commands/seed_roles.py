@@ -24,6 +24,7 @@ ROLES_BASE = {
             'ver_usuarios',
             'ver_trabajadores', 'gestionar_trabajadores',
             'ver_evaluaciones', 'gestionar_evaluaciones',
+            'ver_analytics', 'gestionar_analytics',
             'ver_capacitaciones', 'gestionar_capacitaciones',
             'ver_reportes', 'gestionar_reportes',
             'ver_bitacora',
@@ -32,7 +33,7 @@ ROLES_BASE = {
     'Supervisor': {
         'descripcion': 'Consulta el desempeño y cumplimiento de los trabajadores.',
         'permisos': [
-            'ver_trabajadores', 'ver_evaluaciones',
+            'ver_trabajadores', 'ver_evaluaciones', 'ver_analytics',
             'ver_capacitaciones', 'ver_reportes', 'ver_bitacora',
         ],
     },

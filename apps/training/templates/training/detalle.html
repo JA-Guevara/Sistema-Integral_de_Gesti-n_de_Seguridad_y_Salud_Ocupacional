@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block title %}{{ plan.titulo }}{% endblock %}
+{% block topbar_title %}Capacitaciones{% endblock %}
+
+{% block content %}
+  <div class="d-flex flex-wrap justify-content-between align-items-start mb-4" data-reveal>
+    <div>
+      <h1 class="h3 mb-1">{{ plan.titulo }}</h1>
+      {% if plan.activo %}<span class="badge text-bg-success">Activo</span>{% else %}<span class="badge text-bg-secondary">Cancelado</span>{% endif %}
+      <span class="text-muted ms-2">{{ plan.area_tema }}</span>
+      {% if plan.material_url %}<a href="{{ plan.material_url }}" target="_blank" rel="noopener" class="ms-2 small"><i class="bi bi-box-arrow-up-right"></i> Material</a>{% endif %}
+    </div>
+    <div class="d-flex gap-2">
+      <a href="{% url 'training:lista' %}" class="btn btn-outline-secondary">Volver</a>
+      {% if perms.usuarios.gestionar_capacitaciones and plan.activo %}
+        <a href="{% url 'training:editar' plan.id %}" class="btn btn-outline-primary">Editar</a>
+        <a href="{% url 'training:asignar' plan.id %}" class="btn btn-primary">Asignar</a>
+        <form method="post" action="{% url 'training:cancelar' plan.id %}" data-confirm="¿Cancelar este plan?">{% csrf_token %}<button class="btn btn-outline-danger">Cancelar plan</button></form>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if plan.descripcion %}<p class="text-muted" data-reveal>{{ plan.descripcion }}</p>{% endif %}
+
+  <div class="card shadow-sm" data-reveal><div class="card-body">
+    <h2 class="h5 mb-3">Trabajadores asignados ({{ asignaciones|length }})</h2>
+    <div class="table-responsive">
+      <table class="table align-middle mb-0">
+        <thead class="table-light"><tr><th>Trabajador</th><th style="min-width:160px">Avance</th><th class="text-center">Estado</th>{% if perms.usuarios.gestionar_capacitaciones %}<th class="text-end">Avance</th>{% endif %}</tr></thead>
+        <tbody>
+          {% for a in asignaciones %}
+            <tr>
+              <td>{{ a.trabajador.nombre_completo }}</td>
+              <td>
+                <div class="progress" style="height: 10px;"><div class="progress-bar bg-success" style="width: {{ a.avance_pct }}%;"></div></div>
+                <span class="small text-muted">{{ a.avance_pct }}%</span>
+              </td>
+              <td class="text-center">
+                {% if a.estado == 'completado' %}<span class="badge text-bg-success">Completado</span>
+                {% elif a.estado == 'en_curso' %}<span class="badge text-bg-warning">En curso</span>
+                {% elif a.estado == 'cancelado' %}<span class="badge text-bg-secondary">Cancelado</span>
+                {% else %}<span class="badge text-bg-secondary">Pendiente</span>{% endif %}
+              </td>
+              {% if perms.usuarios.gestionar_capacitaciones %}
+              <td class="text-end">
+                {% if a.estado != 'completado' and a.estado != 'cancelado' %}
+                  <form method="post" action="{% url 'training:avance' a.id %}" class="d-inline-flex gap-1">
+                    {% csrf_token %}
+                    <input type="number" name="avance_pct" min="0" max="100" value="{{ a.avance_pct }}" class="form-control form-control-sm" style="width:80px">
+                    <button class="btn btn-sm btn-outline-primary">Guardar</button>
+                  </form>
+                  <form method="post" action="{% url 'training:avance' a.id %}" class="d-inline">{% csrf_token %}<input type="hidden" name="completar" value="1"><button class="btn btn-sm btn-success">Completar</button></form>
+                {% endif %}
+              </td>
+              {% endif %}
+            </tr>
+          {% empty %}
+            <tr><td colspan="4" class="text-muted text-center py-3">Sin trabajadores asignados.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div></div>
+{% endblock %}

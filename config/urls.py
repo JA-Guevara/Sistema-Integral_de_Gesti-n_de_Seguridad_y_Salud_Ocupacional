@@ -30,6 +30,24 @@ urlpatterns = [
     # Usuarios, roles y permisos (namespace 'usuarios')
     path('usuarios/', include('apps.usuarios.urls')),
 
+    # Trabajadores / padrón (namespace 'workers')
+    path('trabajadores/', include('apps.workers.urls')),
+
+    # Evaluaciones (namespace 'evaluations')
+    path('evaluaciones/', include('apps.evaluations.urls')),
+
+    # Analítica (namespace 'analytics')
+    path('analitica/', include('apps.analytics.urls')),
+
+    # Capacitaciones (namespace 'training')
+    path('capacitaciones/', include('apps.training.urls')),
+
+    # Reportes (namespace 'reports')
+    path('reportes/', include('apps.reports.urls')),
+
+    # Bitácora (namespace 'audit')
+    path('bitacora/', include('apps.audit.urls')),
+
     # La raíz redirige al dashboard (si no hay sesión, este redirige al login).
     path('', RedirectView.as_view(pattern_name='dashboard:index', permanent=False)),
 ]

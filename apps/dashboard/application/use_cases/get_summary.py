@@ -13,12 +13,13 @@ class GetDashboardSummaryUseCase:
     """Reúne los indicadores que se muestran en las tarjetas del dashboard."""
 
     def execute(self, user):
-        return {
-            # Dato real disponible hoy:
-            'usuarios': User.objects.count(),
+        from apps.evaluations.models import Evaluacion
+        from apps.training.models import PlanCapacitacion
+        from apps.workers.models import Trabajador
 
-            # Pendientes hasta que existan sus módulos:
-            'trabajadores': None,      # from apps.trabajadores.models import Trabajador
-            'evaluaciones': None,      # from apps.evaluaciones.models import Evaluacion
-            'capacitaciones': None,    # from apps.capacitaciones.models import Capacitacion
+        return {
+            'usuarios': User.objects.count(),
+            'trabajadores': Trabajador.objects.count(),
+            'evaluaciones': Evaluacion.objects.count(),
+            'capacitaciones': PlanCapacitacion.objects.count(),
         }

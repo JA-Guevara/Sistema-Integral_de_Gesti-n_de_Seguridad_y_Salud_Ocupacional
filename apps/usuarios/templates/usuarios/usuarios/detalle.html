@@ -41,7 +41,8 @@
           <div class="d-grid gap-2">
             <a href="{% url 'usuarios:user_update' usuario.id %}" class="btn btn-outline-primary">Editar usuario</a>
 
-            <form method="post" action="{% url 'usuarios:user_toggle' usuario.id %}">
+            <form method="post" action="{% url 'usuarios:user_toggle' usuario.id %}"
+                  data-confirm="¿Seguro que deseas cambiar el estado de este usuario?">
               {% csrf_token %}
               {% if usuario.is_active %}
                 <button class="btn btn-outline-danger w-100">Desactivar usuario</button>
@@ -50,7 +51,8 @@
               {% endif %}
             </form>
 
-            <form method="post" action="{% url 'usuarios:user_reset_password' usuario.id %}">
+            <form method="post" action="{% url 'usuarios:user_reset_password' usuario.id %}"
+                  data-confirm="¿Enviar el enlace de recuperación al correo del usuario?">
               {% csrf_token %}
               <button class="btn btn-outline-secondary w-100">Enviar enlace de recuperación</button>
             </form>

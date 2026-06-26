@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}Evaluaciones{% endblock %}
+{% block topbar_title %}Evaluaciones{% endblock %}
+
+{% block content %}
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4" data-reveal>
+    <div>
+      <p class="eyebrow mb-0">Núcleo</p>
+      <h1 class="h3 mb-0">Evaluaciones</h1>
+    </div>
+    {% if perms.usuarios.gestionar_evaluaciones %}
+      <a href="{% url 'evaluations:crear' %}" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i> Nueva evaluación</a>
+    {% endif %}
+  </div>
+
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-lg-3" data-reveal><div class="stat-card"><span class="stat-icon teal"><i class="bi bi-clipboard-check-fill"></i></span><div class="stat-value mt-3">{{ resumen.total }}</div><div class="text-muted small">Evaluaciones</div></div></div>
+    <div class="col-6 col-lg-3" data-reveal><div class="stat-card"><span class="stat-icon green"><i class="bi bi-unlock-fill"></i></span><div class="stat-value mt-3">{{ resumen.abiertas }}</div><div class="text-muted small">Abiertas</div></div></div>
+    <div class="col-6 col-lg-3" data-reveal><div class="stat-card"><span class="stat-icon mint"><i class="bi bi-pencil-square"></i></span><div class="stat-value mt-3">{{ resumen.borradores }}</div><div class="text-muted small">Borradores</div></div></div>
+    <div class="col-6 col-lg-3" data-reveal><div class="stat-card"><span class="stat-icon orange"><i class="bi bi-check2-circle"></i></span><div class="stat-value mt-3">{{ resumen.rendiciones }}</div><div class="text-muted small">Rendiciones</div></div></div>
+  </div>
+
+  <div class="mb-3" style="max-width: 380px;" data-reveal>
+    <div class="input-group">
+      <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+      <input type="search" class="form-control" placeholder="Buscar por título o área…" data-table-filter="#tabla-eval">
+    </div>
+  </div>
+
+  <div class="card shadow-sm" data-reveal>
+    <div class="table-responsive">
+      <table id="tabla-eval" class="table table-hover align-middle mb-0">
+        <thead class="table-light">
+          <tr><th>Evaluación</th><th>Área</th><th class="text-center">Preguntas</th><th class="text-center">Asignados</th><th class="text-center">Estado</th><th class="text-end">Acciones</th></tr>
+        </thead>
+        <tbody>
+          {% for e in evaluaciones %}
+            <tr data-row>
+              <td class="fw-semibold">{{ e.titulo }}</td>
+              <td class="text-muted small">{{ e.area_tema }}</td>
+              <td class="text-center">{{ e.n_preguntas }}</td>
+              <td class="text-center">{{ e.n_asignaciones }}</td>
+              <td class="text-center">{% include 'evaluations/_estado_badge.html' %}</td>
+              <td class="text-end">
+                <a href="{% url 'evaluations:detalle' e.id %}" class="btn btn-sm btn-outline-secondary" title="Ver"><i class="bi bi-eye"></i></a>
+                <a href="{% url 'evaluations:estadisticas' e.id %}" class="btn btn-sm btn-outline-primary" title="Estadísticas"><i class="bi bi-bar-chart"></i></a>
+              </td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="6" class="text-center text-muted py-4">Todavía no hay evaluaciones. Crea la primera.</td></tr>
+          {% endfor %}
+          <tr class="filtro-vacio" data-filter-empty><td colspan="6" class="text-center text-muted py-4">Sin coincidencias.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}

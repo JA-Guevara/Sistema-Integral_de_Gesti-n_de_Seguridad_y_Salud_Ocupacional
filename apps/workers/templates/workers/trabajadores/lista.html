@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% block title %}Trabajadores{% endblock %}
+{% block topbar_title %}Trabajadores{% endblock %}
+
+{% block content %}
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4" data-reveal>
+    <div>
+      <p class="eyebrow mb-0">Padrón</p>
+      <h1 class="h3 mb-0">Trabajadores</h1>
+    </div>
+    {% if perms.usuarios.gestionar_trabajadores %}
+      <a href="{% url 'workers:trabajador_create' %}" class="btn btn-primary">
+        <i class="bi bi-plus-lg me-1"></i> Nuevo trabajador
+      </a>
+    {% endif %}
+  </div>
+
+  <!-- Tarjetas KPI (animadas por app.js) -->
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-lg-3" data-reveal>
+      <div class="stat-card">
+        <span class="stat-icon teal"><i class="bi bi-people-fill"></i></span>
+        <div class="stat-value mt-3">{{ resumen.total }}</div>
+        <div class="text-muted small">Trabajadores</div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3" data-reveal>
+      <div class="stat-card">
+        <span class="stat-icon green"><i class="bi bi-person-check-fill"></i></span>
+        <div class="stat-value mt-3">{{ resumen.activos }}</div>
+        <div class="text-muted small">Activos</div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3" data-reveal>
+      <div class="stat-card">
+        <span class="stat-icon orange"><i class="bi bi-exclamation-triangle-fill"></i></span>
+        <div class="stat-value mt-3">{{ resumen.riesgo_alto }}</div>
+        <div class="text-muted small">Riesgo alto/crítico</div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3" data-reveal>
+      <div class="stat-card">
+        <span class="stat-icon mint"><i class="bi bi-building"></i></span>
+        <div class="stat-value mt-3">{{ resumen.empresas }}</div>
+        <div class="text-muted small">Empresas</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mb-3" style="max-width: 380px;" data-reveal>
+    <div class="input-group">
+      <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+      <input type="search" class="form-control" placeholder="Buscar por nombre, documento, área…"
+             data-table-filter="#tabla-trabajadores" aria-label="Buscar trabajadores">
+    </div>
+  </div>
+
+  <div class="card shadow-sm" data-reveal>
+    <div class="table-responsive">
+      <table id="tabla-trabajadores" class="table table-hover align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Trabajador</th>
+            <th>Documento</th>
+            <th>Cargo / Área</th>
+            <th class="text-center">Riesgo</th>
+            <th class="text-center">Estado</th>
+            <th class="text-end">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for t in trabajadores %}
+            <tr data-row>
+              <td>
+                {{ t.nombre_completo }}
+                <span class="text-muted small d-block">{{ t.empresa.nombre }}</span>
+              </td>
+              <td>{{ t.documento }}</td>
+              <td>{{ t.cargo.nombre }} <span class="text-muted small d-block">{{ t.area.nombre }}</span></td>
+              <td class="text-center">
+                {% if t.nivel_riesgo.es_critico %}
+                  <span class="badge text-bg-danger">{{ t.nivel_riesgo.nombre }}</span>
+                {% else %}
+                  <span class="badge text-bg-secondary">{{ t.nivel_riesgo.nombre }}</span>
+                {% endif %}
+              </td>
+              <td class="text-center">
+                {% if t.activo %}<span class="badge text-bg-success">Activo</span>
+                {% else %}<span class="badge text-bg-danger">Inactivo</span>{% endif %}
+              </td>
+              <td class="text-end">
+                <a href="{% url 'workers:trabajador_detail' t.id %}" class="btn btn-sm btn-outline-secondary" title="Ver"><i class="bi bi-eye"></i></a>
+                {% if perms.usuarios.gestionar_trabajadores %}
+                  <a href="{% url 'workers:trabajador_update' t.id %}" class="btn btn-sm btn-outline-primary" title="Editar"><i class="bi bi-pencil"></i></a>
+                  <form method="post" action="{% url 'workers:trabajador_toggle' t.id %}" class="d-inline">
+                    {% csrf_token %}
+                    {% if t.activo %}
+                      <button class="btn btn-sm btn-outline-danger" title="Desactivar"><i class="bi bi-person-x"></i></button>
+                    {% else %}
+                      <button class="btn btn-sm btn-outline-success" title="Activar"><i class="bi bi-person-check"></i></button>
+                    {% endif %}
+                  </form>
+                {% endif %}
+              </td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="6" class="text-center text-muted py-4">Todavía no hay trabajadores. Crea el primero.</td></tr>
+          {% endfor %}
+          <tr class="filtro-vacio" data-filter-empty><td colspan="6" class="text-center text-muted py-4">Sin coincidencias para tu búsqueda.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}

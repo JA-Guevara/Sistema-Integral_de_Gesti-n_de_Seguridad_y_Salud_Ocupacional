@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Reportes{% endblock %}
+{% block topbar_title %}Reportes{% endblock %}
+
+{% block content %}
+  <div class="mb-4" data-reveal>
+    <p class="eyebrow mb-0">Cumplimiento normativo</p>
+    <h1 class="h3 mb-0">Dashboard de cumplimiento</h1>
+  </div>
+
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-lg-3" data-reveal><div class="stat-card"><span class="stat-icon teal"><i class="bi bi-people-fill"></i></span><div class="stat-value mt-3">{{ resumen.trabajadores }}</div><div class="text-muted small">Trabajadores activos</div></div></div>
+    <div class="col-6 col-lg-3" data-reveal><div class="stat-card"><span class="stat-icon green"><i class="bi bi-patch-check-fill"></i></span><div class="stat-value mt-3">{{ resumen.cumplen }}</div><div class="text-muted small">Cumplen</div></div></div>
+    <div class="col-6 col-lg-3" data-reveal><div class="stat-card"><span class="stat-icon orange"><i class="bi bi-hourglass-split"></i></span><div class="stat-value mt-3">{{ resumen.pendientes }}</div><div class="text-muted small">Pendientes</div></div></div>
+    <div class="col-6 col-lg-3" data-reveal><div class="stat-card"><span class="stat-icon red"><i class="bi bi-exclamation-octagon-fill"></i></span><div class="stat-value mt-3">{{ resumen.brechas_abiertas }}</div><div class="text-muted small">Brechas abiertas</div></div></div>
+  </div>
+
+  <div class="card shadow-sm" data-reveal><div class="card-body">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <span class="fw-semibold">Nivel global de cumplimiento</span>
+      <span class="h5 mb-0">{{ resumen.pct_cumplimiento }}%</span>
+    </div>
+    <div class="progress mb-4" style="height: 16px;"><div class="progress-bar bg-success" style="width: {{ resumen.pct_cumplimiento }}%;"></div></div>
+
+    <h2 class="h6 text-muted">Reportes disponibles</h2>
+    <a href="{% url 'reports:cumplimiento' %}" class="btn btn-primary"><i class="bi bi-file-earmark-text me-1"></i> Reporte de cumplimiento (detalle + export PDF/Excel)</a>
+  </div></div>
+{% endblock %}

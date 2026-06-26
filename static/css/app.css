@@ -513,3 +513,64 @@ a:hover { color: var(--accent-green-strong); }
 tr.filtro-oculto { display: none; }
 tr.filtro-vacio { display: none; }
 tr.filtro-vacio.is-visible { display: table-row; }
+
+/* ---- Pestañas y paginación en verde (coherencia de marca) ---- */
+.nav-tabs .nav-link { color: var(--app-muted); border: 0; border-bottom: 2px solid transparent; }
+.nav-tabs .nav-link:hover { color: var(--accent-green); border-bottom-color: rgba(15, 118, 110, .3); }
+.nav-tabs .nav-link.active {
+  color: var(--accent-green-strong);
+  font-weight: 600;
+  background: transparent;
+  border-bottom: 2px solid var(--accent-green);
+}
+.page-link { color: var(--accent-green); }
+.page-link:hover { color: var(--accent-green-strong); }
+.page-item.active .page-link {
+  background-color: var(--accent-green);
+  border-color: var(--accent-green);
+}
+
+/* ============================================================
+   Azules residuales de BS 5.3 que NO leen --bs-primary
+   (foco global, dropdown activo, alertas info, list-group…)
+   ============================================================ */
+:root { --bs-focus-ring-color: rgba(15, 118, 110, .28); }
+
+.btn:focus-visible,
+.account-button:focus-visible,
+.dropdown-item:focus-visible,
+.page-link:focus,
+a:focus-visible {
+  box-shadow: 0 0 0 .25rem rgba(15, 118, 110, .28) !important;
+  outline: 0;
+}
+
+/* Ítem activo del menú de cuenta / dropdowns (era azul) */
+.dropdown-menu {
+  --bs-dropdown-link-active-bg: #0f766e;
+  --bs-dropdown-link-active-color: #fff;
+}
+
+/* Alertas info/primary (ej. aviso azul al cerrar sesión) -> verde suave */
+.alert-info,
+.alert-primary {
+  --bs-alert-color: #0b5d52;
+  --bs-alert-bg: #e6f2f0;
+  --bs-alert-border-color: #b9ddd7;
+}
+
+/* List group / nav-pills / progreso / acordeón / botón info */
+.list-group { --bs-list-group-active-bg: #0f766e; --bs-list-group-active-border-color: #0f766e; }
+.nav { --bs-nav-pills-link-active-bg: #0f766e; }
+.progress { --bs-progress-bar-bg: #16a34a; }
+.accordion { --bs-accordion-active-color: #0b5d52; --bs-accordion-active-bg: #e6f2f0; }
+.btn-info {
+  --bs-btn-color: #fff; --bs-btn-bg: #0d9488; --bs-btn-border-color: #0d9488;
+  --bs-btn-hover-color: #fff; --bs-btn-hover-bg: #0b7d72; --bs-btn-hover-border-color: #0b7d72;
+}
+.spinner-border.text-primary,
+.spinner-grow.text-primary { color: #0f766e !important; }
+
+/* Submit deshabilitado (asignación masiva sin selección) */
+.btn:disabled,
+.btn.disabled { opacity: .55; }

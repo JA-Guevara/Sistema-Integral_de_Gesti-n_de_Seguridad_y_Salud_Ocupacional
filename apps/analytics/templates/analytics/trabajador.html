@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}Diagnóstico · {{ trabajador.nombre_completo }}{% endblock %}
+{% block topbar_title %}Analítica{% endblock %}
+
+{% block content %}
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4" data-reveal>
+    <div>
+      <p class="eyebrow mb-0">Diagnóstico individual</p>
+      <h1 class="h3 mb-0">{{ trabajador.nombre_completo }}</h1>
+    </div>
+    <div class="d-flex gap-2">
+      <a href="{% url 'analytics:dashboard' %}" class="btn btn-outline-secondary">Volver</a>
+      {% if perms.usuarios.gestionar_analytics %}
+        <form method="post">{% csrf_token %}<button class="btn btn-primary"><i class="bi bi-cpu me-1"></i> Analizar</button></form>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-lg-6" data-reveal>
+      <div class="card shadow-sm h-100"><div class="card-body">
+        <h2 class="h5 mb-3">Nivel de competencia por área</h2>
+        {% for n in niveles %}
+          <div class="mb-3">
+            <div class="d-flex justify-content-between small"><span class="fw-semibold">{{ n.area_tema }}</span><span>{{ n.score|floatformat:0 }}%</span></div>
+            <div class="progress" style="height: 10px;">
+              <div class="progress-bar {% if n.score < 70 %}bg-danger{% else %}bg-success{% endif %}" style="width: {{ n.score }}%;"></div>
+            </div>
+          </div>
+        {% empty %}
+          <p class="text-muted mb-0">Sin datos de competencia. Procesa el análisis tras registrar rendiciones.</p>
+        {% endfor %}
+      </div></div>
+    </div>
+
+    <div class="col-lg-6" data-reveal>
+      <div class="card shadow-sm h-100"><div class="card-body">
+        <h2 class="h5 mb-3">Brechas detectadas</h2>
+        {% for b in brechas %}
+          <div class="border-bottom py-2">
+            <div class="d-flex justify-content-between">
+              <span class="fw-semibold small">{{ b.area_tema }}</span>
+              {% if b.estado == 'sugerida' %}<span class="badge text-bg-warning">Sugerida</span>
+              {% elif b.estado == 'validada' %}<span class="badge text-bg-success">Validada</span>
+              {% else %}<span class="badge text-bg-secondary">Descartada</span>{% endif %}
+            </div>
+            <div class="text-muted small">{{ b.descripcion }}</div>
+          </div>
+        {% empty %}
+          <p class="text-muted mb-0">Sin brechas registradas.</p>
+        {% endfor %}
+      </div></div>
+    </div>
+  </div>
+{% endblock %}

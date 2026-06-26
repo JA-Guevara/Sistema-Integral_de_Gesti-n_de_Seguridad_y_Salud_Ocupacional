@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block title %}Preguntas · {{ evaluacion.titulo }}{% endblock %}
+{% block topbar_title %}Evaluaciones{% endblock %}
+
+{% block content %}
+  <div class="d-flex justify-content-between align-items-center mb-4" data-reveal>
+    <div>
+      <p class="eyebrow mb-0">{{ evaluacion.titulo }}</p>
+      <h1 class="h3 mb-0">Preguntas</h1>
+    </div>
+    <a href="{% url 'evaluations:detalle' evaluacion.id %}" class="btn btn-outline-secondary">Volver</a>
+  </div>
+
+  {% if not evaluacion.editable %}
+    <div class="alert alert-warning" data-reveal>Las preguntas solo se editan en estado <strong>borrador</strong>.</div>
+  {% endif %}
+
+  <div class="card shadow-sm mb-4" data-reveal><div class="card-body">
+    <h2 class="h5 mb-3">Preguntas actuales ({{ preguntas|length }})</h2>
+    {% for p in preguntas %}
+      <div class="border rounded p-3 mb-2">
+        <div class="d-flex justify-content-between">
+          <div class="fw-semibold">{{ forloop.counter }}. {{ p.enunciado }} <span class="badge text-bg-secondary ms-1">x{{ p.ponderacion }}</span></div>
+          {% if evaluacion.editable %}
+            <form method="post" action="{% url 'evaluations:eliminar_pregunta' evaluacion.id p.id %}" data-confirm="¿Eliminar la pregunta?">{% csrf_token %}<button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button></form>
+          {% endif %}
+        </div>
+        <ul class="mb-0 mt-2 small">
+          {% for o in p.opciones.all %}
+            <li class="{% if o.es_correcta %}text-success fw-semibold{% endif %}">{{ o.texto }} {% if o.es_correcta %}<i class="bi bi-check-circle-fill"></i>{% endif %}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% empty %}
+      <p class="text-muted mb-0">Aún no hay preguntas.</p>
+    {% endfor %}
+  </div></div>
+
+  {% if evaluacion.editable %}
+  <div class="card shadow-sm" data-reveal><div class="card-body">
+    <h2 class="h5 mb-3">Agregar pregunta</h2>
+    <form method="post">
+      {% csrf_token %}
+      <div class="mb-3"><label class="form-label">Enunciado</label><textarea name="enunciado" rows="2" class="form-control" required></textarea></div>
+      <div class="row g-3 mb-3">
+        <div class="col-md-6"><label class="form-label">Tipo</label>
+          <select name="tipo" class="form-select">
+            <option value="opcion_multiple">Opción múltiple</option>
+            <option value="verdadero_falso">Verdadero / Falso</option>
+          </select>
+        </div>
+        <div class="col-md-6"><label class="form-label">Ponderación</label><input type="number" name="ponderacion" value="1" min="1" class="form-control"></div>
+      </div>
+      <label class="form-label">Opciones <span class="text-muted small">(marca la/las correctas)</span></label>
+      {% for i in "0123" %}
+        <div class="input-group mb-2">
+          <div class="input-group-text"><input class="form-check-input mt-0" type="checkbox" name="correcta" value="{{ forloop.counter0 }}"></div>
+          <input type="text" name="opcion_texto" class="form-control" placeholder="Opción {{ forloop.counter }}">
+        </div>
+      {% endfor %}
+      <button type="submit" class="btn btn-primary mt-2">Agregar pregunta</button>
+    </form>
+  </div></div>
+  {% endif %}
+{% endblock %}

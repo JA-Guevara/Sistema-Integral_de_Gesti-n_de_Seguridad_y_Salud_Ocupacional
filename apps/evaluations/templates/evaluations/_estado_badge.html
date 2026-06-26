@@ -1,0 +1,6 @@
+{% if e.estado == 'borrador' %}<span class="badge text-bg-secondary">Borrador</span>
+{% elif e.estado == 'publicada' %}<span class="badge text-bg-primary">Publicada</span>
+{% elif e.estado == 'abierta' %}<span class="badge text-bg-success">Abierta</span>
+{% elif e.estado == 'cerrada' %}<span class="badge text-bg-dark">Cerrada</span>
+{% elif e.estado == 'cancelada' %}<span class="badge text-bg-danger">Cancelada</span>
+{% else %}<span class="badge text-bg-light text-dark border">Archivada</span>{% endif %}

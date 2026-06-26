@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Asignar · {{ plan.titulo }}{% endblock %}
+{% block topbar_title %}Capacitaciones{% endblock %}
+
+{% block content %}
+  <div class="d-flex justify-content-between align-items-center mb-4" data-reveal>
+    <div><p class="eyebrow mb-0">{{ plan.titulo }}</p><h1 class="h3 mb-0">Asignar plan</h1></div>
+    <a href="{% url 'training:detalle' plan.id %}" class="btn btn-outline-secondary">Volver</a>
+  </div>
+
+  <form method="post" data-reveal>
+    {% csrf_token %}
+    <div class="card shadow-sm"><div class="card-body">
+      {% for t in trabajadores %}
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="trabajadores" value="{{ t.id }}" id="t{{ t.id }}">
+          <label class="form-check-label" for="t{{ t.id }}">{{ t.nombre_completo }} <span class="text-muted small">· {{ t.cargo.nombre }}</span></label>
+        </div>
+      {% empty %}
+        <p class="text-muted mb-0">No hay trabajadores activos pendientes de asignar.</p>
+      {% endfor %}
+    </div></div>
+    <button type="submit" class="btn btn-primary mt-3">Asignar seleccionados</button>
+  </form>
+{% endblock %}

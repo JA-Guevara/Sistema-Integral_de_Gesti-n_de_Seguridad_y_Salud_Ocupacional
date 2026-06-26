@@ -69,4 +69,30 @@
       if (emptyRow) emptyRow.classList.toggle("is-visible", visibles === 0);
     });
   });
+  // --- Confirmación en acciones destructivas: <form data-confirm="mensaje"> ---
+  document.querySelectorAll("form[data-confirm]").forEach(function (form) {
+    form.addEventListener("submit", function (e) {
+      if (!window.confirm(form.getAttribute("data-confirm"))) {
+        e.preventDefault();
+      }
+    });
+  });
+
+  // --- Asignación masiva: contador en vivo + submit deshabilitado si no hay selección ---
+  (function () {
+    const bulkForm = document.getElementById("bulk-form");
+    if (!bulkForm) return;
+    const submit = bulkForm.querySelector('button[type="submit"]');
+    const checks = document.querySelectorAll('input[name="usuarios"][form="bulk-form"]');
+    if (!submit || !checks.length) return;
+
+    const baseLabel = submit.textContent.trim();
+    function refresh() {
+      const n = document.querySelectorAll('input[name="usuarios"][form="bulk-form"]:checked').length;
+      submit.disabled = n === 0;
+      submit.textContent = n ? baseLabel + " (" + n + ")" : baseLabel;
+    }
+    checks.forEach(function (c) { c.addEventListener("change", refresh); });
+    refresh();
+  })();
 })();

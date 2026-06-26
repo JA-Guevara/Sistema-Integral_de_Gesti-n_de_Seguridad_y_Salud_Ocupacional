@@ -5,10 +5,13 @@
   --app-muted: #697586;
   --sidebar-bg: #17212b;
   --sidebar-bg-2: #202c38;
-  --accent-green: #0f766e;
-  --accent-blue: #2563eb;
-  --accent-orange: #f97316;
-  --accent-red: #dc2626;
+  --accent-green: #0f766e;        /* teal-verde base */
+  --accent-green-strong: #0b5d52; /* verde profundo (hover/active) */
+  --accent-emerald: #16a34a;      /* verde esmeralda */
+  --accent-mint: #2bb673;         /* verde menta */
+  --accent-orange: #f97316;       /* SOLO estados/alerta */
+  --accent-red: #dc2626;          /* SOLO estados/peligro */
+  --brand-grad: linear-gradient(135deg, #0b5d52 0%, #0f766e 45%, #16a34a 100%);
   --border-soft: #dfe7ef;
   --shadow-soft: 0 18px 45px rgba(24, 33, 47, .08);
 }
@@ -85,7 +88,7 @@ body {
   justify-content: center;
   border-radius: 8px;
   color: white;
-  background: linear-gradient(135deg, var(--accent-green), var(--accent-blue));
+  background: var(--brand-grad);
   box-shadow: 0 12px 30px rgba(15, 118, 110, .28);
 }
 
@@ -224,7 +227,7 @@ body {
   justify-content: center;
   border-radius: 8px;
   color: white;
-  background: var(--accent-blue);
+  background: var(--brand-grad);
   font-weight: 700;
 }
 
@@ -258,7 +261,7 @@ body {
   width: 92px;
   height: 92px;
   border-radius: 50%;
-  background: rgba(37, 99, 235, .08);
+  background: rgba(16, 163, 74, .08);
 }
 
 .stat-icon {
@@ -269,12 +272,14 @@ body {
   justify-content: center;
   border-radius: 8px;
   color: white;
-  background: var(--accent-blue);
+  background: var(--accent-green);
 }
 
-.stat-icon.green { background: var(--accent-green); }
+.stat-icon.green  { background: var(--accent-emerald); }
+.stat-icon.teal   { background: #0d9488; }
+.stat-icon.mint   { background: var(--accent-mint); }
 .stat-icon.orange { background: var(--accent-orange); }
-.stat-icon.red { background: var(--accent-red); }
+.stat-icon.red    { background: var(--accent-red); }
 
 .stat-value {
   font-size: 2rem;
@@ -420,3 +425,91 @@ body.sidebar-collapsed .sidebar-footer {
     transition-duration: .01ms !important;
   }
 }
+
+/* ============================================================
+   Paleta Bootstrap -> degradado VERDE (elimina el azul "primary")
+   Un solo lugar recolorea todos los botones/links/badges azules.
+   ============================================================ */
+:root {
+  --bs-primary: #0f766e;
+  --bs-primary-rgb: 15, 118, 110;
+  --bs-link-color: #0f766e;
+  --bs-link-color-rgb: 15, 118, 110;
+  --bs-link-hover-color: #0b5d52;
+}
+
+a { color: var(--accent-green); }
+a:hover { color: var(--accent-green-strong); }
+
+/* Botón primary: degradado verde con elevación al pasar el mouse */
+.btn-primary {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: #0f766e;
+  --bs-btn-border-color: #0f766e;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #0b5d52;
+  --bs-btn-hover-border-color: #0b5d52;
+  --bs-btn-active-bg: #0a4f45;
+  --bs-btn-active-border-color: #0a4f45;
+  --bs-btn-disabled-bg: #0f766e;
+  --bs-btn-disabled-border-color: #0f766e;
+  --bs-btn-focus-shadow-rgb: 15, 118, 110;
+  background-image: var(--brand-grad);
+  border: 0;
+}
+
+.btn-outline-primary {
+  --bs-btn-color: #0f766e;
+  --bs-btn-border-color: #0f766e;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #0f766e;
+  --bs-btn-hover-border-color: #0f766e;
+  --bs-btn-active-bg: #0b5d52;
+  --bs-btn-active-border-color: #0b5d52;
+  --bs-btn-focus-shadow-rgb: 15, 118, 110;
+}
+
+/* "success" alineado a la misma familia verde (coherencia) */
+.btn-success {
+  --bs-btn-bg: #16a34a;
+  --bs-btn-border-color: #16a34a;
+  --bs-btn-hover-bg: #15803d;
+  --bs-btn-hover-border-color: #15803d;
+  --bs-btn-active-bg: #15803d;
+  --bs-btn-active-border-color: #166534;
+  --bs-btn-focus-shadow-rgb: 22, 163, 74;
+}
+
+.bg-primary { background-image: var(--brand-grad) !important; }
+.text-primary { color: #0f766e !important; }
+.text-bg-primary { background-color: #0f766e !important; color: #fff !important; }
+.badge.text-bg-secondary { background-color: #e7efee !important; color: #0b5d52 !important; }
+
+/* Estados de formulario en verde (foco/checkbox) */
+.form-control:focus,
+.form-select:focus {
+  border-color: #34a98c;
+  box-shadow: 0 0 0 .25rem rgba(15, 118, 110, .2);
+}
+.form-check-input:checked {
+  background-color: #0f766e;
+  border-color: #0f766e;
+}
+.form-check-input:focus {
+  border-color: #34a98c;
+  box-shadow: 0 0 0 .25rem rgba(15, 118, 110, .2);
+}
+
+/* ---- Microinteracciones (dinamismo) ---- */
+.btn { transition: transform .12s ease, box-shadow .15s ease, filter .15s ease; }
+.btn-primary:hover,
+.btn-success:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(15, 118, 110, .28); }
+.btn:active { transform: translateY(0); }
+
+.table-hover > tbody > tr { transition: background-color .15s ease; }
+.table-hover > tbody > tr:hover > * { background-color: rgba(15, 118, 110, .06); }
+
+/* Buscador de tablas: filas filtradas / estado vacío */
+tr.filtro-oculto { display: none; }
+tr.filtro-vacio { display: none; }
+tr.filtro-vacio.is-visible { display: table-row; }

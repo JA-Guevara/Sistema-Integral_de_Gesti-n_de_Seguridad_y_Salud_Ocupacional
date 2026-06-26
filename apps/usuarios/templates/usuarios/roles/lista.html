@@ -15,9 +15,17 @@
     </div>
   </div>
 
+  <div class="mb-3" style="max-width: 380px;">
+    <div class="input-group">
+      <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+      <input type="search" class="form-control" placeholder="Buscar rol o descripción…"
+             data-table-filter="#tabla-roles" aria-label="Buscar roles">
+    </div>
+  </div>
+
   <div class="card shadow-sm">
     <div class="table-responsive">
-      <table class="table table-hover align-middle mb-0">
+      <table id="tabla-roles" class="table table-hover align-middle mb-0">
         <thead class="table-light">
           <tr>
             <th>Rol</th>
@@ -30,7 +38,7 @@
         </thead>
         <tbody>
           {% for rol in roles %}
-            <tr>
+            <tr data-row>
               <td class="fw-semibold">{{ rol.name }}</td>
               <td class="text-muted small">{{ rol.perfil.descripcion|default:"—" }}</td>
               <td class="text-center">{{ rol.permissions.count }}</td>
@@ -60,6 +68,7 @@
           {% empty %}
             <tr><td colspan="6" class="text-center text-muted py-4">Todavía no hay roles. Crea el primero o ejecuta <code>seed_roles</code>.</td></tr>
           {% endfor %}
+          <tr class="filtro-vacio" data-filter-empty><td colspan="6" class="text-center text-muted py-4">Sin coincidencias para tu búsqueda.</td></tr>
         </tbody>
       </table>
     </div>

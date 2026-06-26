@@ -36,4 +36,37 @@
       if (instance) instance.hide();
     });
   });
+
+  // --- Animación "count-up" de las tarjetas KPI (.stat-value) ---
+  const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  document.querySelectorAll(".stat-value").forEach(function (el) {
+    const target = parseInt((el.textContent || "").replace(/\D/g, ""), 10);
+    if (isNaN(target) || target <= 0 || prefersReduced) return;
+    const duration = 700;
+    let startTs = null;
+    function tick(ts) {
+      if (!startTs) startTs = ts;
+      const progress = Math.min((ts - startTs) / duration, 1);
+      el.textContent = Math.floor(progress * target).toLocaleString("es-BO");
+      if (progress < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  });
+
+  // --- Buscador de tablas: <input data-table-filter="#idTabla"> ---
+  document.querySelectorAll("[data-table-filter]").forEach(function (input) {
+    const table = document.querySelector(input.getAttribute("data-table-filter"));
+    if (!table) return;
+    const emptyRow = table.querySelector("[data-filter-empty]");
+    input.addEventListener("input", function () {
+      const q = input.value.trim().toLowerCase();
+      let visibles = 0;
+      table.querySelectorAll("tbody tr[data-row]").forEach(function (row) {
+        const match = row.textContent.toLowerCase().indexOf(q) !== -1;
+        row.classList.toggle("filtro-oculto", !match);
+        if (match) visibles += 1;
+      });
+      if (emptyRow) emptyRow.classList.toggle("is-visible", visibles === 0);
+    });
+  });
 })();

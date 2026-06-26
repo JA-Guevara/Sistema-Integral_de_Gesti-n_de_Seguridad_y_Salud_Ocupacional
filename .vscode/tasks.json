@@ -1,0 +1,18 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Playwright: run tests (deploy)",
+      "type": "shell",
+      "command": "cross-env BASE_URL=\"https://jaguevara.pythonanywhere.com\" npx playwright test",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    }
+  ]
+}

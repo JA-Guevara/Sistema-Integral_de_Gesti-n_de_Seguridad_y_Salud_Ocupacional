@@ -1,0 +1,17 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node-terminal",
+      "request": "launch",
+      "name": "Playwright: Run tests (deploy)",
+      "command": "cross-env BASE_URL=\"https://jaguevara.pythonanywhere.com\" npx playwright test"
+    },
+    {
+      "type": "node-terminal",
+      "request": "launch",
+      "name": "Playwright: Run single test (deploy)",
+      "command": "cross-env BASE_URL=\"https://jaguevara.pythonanywhere.com\" npx playwright test ${file}"
+    }
+  ]
+}
